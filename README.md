@@ -78,10 +78,10 @@ As default, plugins will be built in `build_dir/src/app/plugins`. Friction will 
 
 ## Contribute
 
-Fork and make a pull request. This repo is less restrictive than the main Friction repo, we also allow the use of "AI" tools if wanted.
+Fork and make a pull request. This repo is less restrictive than the Friction repo, we allow the use of "AI" tools.
 
 ## License
 
 **`SPDX-License-Identifier: GPL-3.0-only`**
 
-Plugins must also use this license.
+All plugins must use this license.
