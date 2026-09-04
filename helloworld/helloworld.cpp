@@ -13,17 +13,16 @@
 // this function is optional
 HelloWorldPlugin::~HelloWorldPlugin()
 {
-    qDebug() << "end plugin";
+    qDebug() << "End Hello World plugin";
 }
 
 // this function is optional
 void HelloWorldPlugin::init()
 {
-    qDebug() << "start plugin";
+    qDebug() << "Start Hello Worldplugin";
 }
 
-// add (optional) actions in plugin menu (Plugins/Group/Action)
-// you MUST always return QList<QAction*>
+// add optional actions in plugin menu (Plugins/Group/Action)
 QList<QAction*> HelloWorldPlugin::createMenuActions(QObject* parent)
 {
     QList<QAction*> actions;
@@ -38,8 +37,7 @@ QList<QAction*> HelloWorldPlugin::createMenuActions(QObject* parent)
     return actions;
 }
 
-// add (optional) action to main toolbar
-// you MUST always return QList<QAction*>
+// add optional action to main toolbar
 QList<QAction*> HelloWorldPlugin::createToolbarActions(QObject *parent)
 {
     QList<QAction*> actions;
@@ -52,12 +50,12 @@ QList<QAction*> HelloWorldPlugin::createToolbarActions(QObject *parent)
     return actions;
 }
 
-// handle triggered actions
+// handle optional triggered actions
 void HelloWorldPlugin::triggerAction(Document &doc,
                                      Canvas* const scene,
                                      const QAction *act)
 {
-    // do whatever if action triggered.
+    // do whatever if action triggered. This is just an example.
 
     if (!scene) {
         QMessageBox::warning(nullptr, "Hello World!",

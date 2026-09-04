@@ -10,6 +10,7 @@ class HelloWorldPlugin : public QObject,
     Q_INTERFACES(FrictionCorePluginInterface)
 
 public:
+    // everything here is optional
     ~HelloWorldPlugin() override;
     void init() override;
 

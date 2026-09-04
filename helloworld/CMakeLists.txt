@@ -20,7 +20,7 @@ add_library(${PROJECT_NAME} MODULE
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../../core
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../ui
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../ui # only if you use stuff from UI
     ${CMAKE_CURRENT_SOURCE_DIR}/../../skia
 )
 
@@ -32,8 +32,8 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Gui
     Qt5::Widgets
     frictioncore
-    # frictionui
-    # skia-friction
+    # frictionui # if you use stuff from UI
+    # skia-friction # if you directly use skia (on Windows it's 'skia')
 )
 
 if(APPLE)
