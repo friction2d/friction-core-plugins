@@ -2,4 +2,13 @@
 
 add_custom_target(all_friction_plugins)
 
-add_subdirectory(helloworld)
+option(BUILD_PLG_HELLOWORLD "Build Hello World Plugin" OFF)
+option(BUILD_PLG_IMPORTTXT "Build Import TXT Plugin" ON)
+
+if(BUILD_PLG_HELLOWORLD)
+    add_subdirectory(helloworld)
+endif()
+
+if(BUILD_PLG_IMPORTTXT)
+    add_subdirectory(importtxt)
+endif()
