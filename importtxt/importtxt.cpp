@@ -12,6 +12,8 @@
 qsptr<BoundingBox> ImportTxtPlugin::importFile(Canvas * const scene,
                                                const QString &path)
 {
+    Q_UNUSED(scene);
+
     QFileInfo fileInfo(path);
     if (!fileInfo.exists() || !fileInfo.isFile()) { return nullptr; }
 
