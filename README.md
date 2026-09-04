@@ -7,7 +7,7 @@ Community Core (C++) Plugins for Friction.
 * Hello World *(Example)*
 * Import Text File
 
-## Interface
+## Interface *(coreplugininterface.h)*
 
 ```cpp
 class FrictionCorePluginInterface
@@ -46,6 +46,21 @@ public:
         return nullptr;
     }
 };
+```
+
+## Meta *(plugin.json)*
+
+```
+{
+    "id": "graphics.friction.plugin.helloworld",
+    "name": "Hello World",
+    "version": "1.0.0",
+    "author": "Friction",
+    "url": "https://friction.graphics",
+    "description": "Hello World Example Plugin",
+    "group": "Test",
+    "api": "graphics.friction.CorePluginInterface/1.0"
+}
 ```
 
 ## Build
