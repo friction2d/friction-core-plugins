@@ -6,5 +6,6 @@
     "url": "https://friction.graphics",
     "description": "Import Text File",
     "import_extensions": ["txt"],
+    "group": "Import",
     "api": "graphics.friction.CorePluginInterface/1.0"
 }
