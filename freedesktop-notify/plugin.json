@@ -1,0 +1,9 @@
+{
+    "id": "graphics.friction.plugin.freedesktop.notify",
+    "name": "Linux System Notifications",
+    "version": "1.0.0",
+    "author": "Ole-André Rodlie",
+    "description": "Show system notifications on Linux.",
+    "group": "System",
+    "api": "graphics.friction.CorePluginInterface/1.0"
+}
