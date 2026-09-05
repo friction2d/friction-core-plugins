@@ -29,6 +29,12 @@ Community Core (C++) Plugins for Friction.
 - **Group:** System
 - **Author:** Ole-André Rodlie
 
+### Linux System Notifications `v1.0.0`
+- **ID:** `graphics.friction.plugin.freedesktop.notify`
+- **Description:** Show system notifications on Linux.
+- **Group:** System
+- **Author:** Ole-André Rodlie
+
 
 ## Interface
 
@@ -81,6 +87,13 @@ public:
     {
         Q_UNUSED(frame);
         Q_UNUSED(total);
+    }
+
+    virtual void showNotification(const QString& title,
+                                  const QString& message)
+    {
+        Q_UNUSED(title);
+        Q_UNUSED(message);
     }
 };
 ```
@@ -154,6 +167,17 @@ Triggered continuously during a rendering or export operation to report the curr
 * `total`: The total number of frames in the current rendering task.
 
 **Performance Note**: Because this method is called very frequently (typically once per frame), you should avoid executing heavy computations or complex UI updates within this callback.
+
+```cpp
+virtual void showNotification(const QString& title, const QString& message);
+```
+
+Triggered by Friction to display a notification. This is typically used to alert the user about the status of background tasks, such as when a long-running rendering or export job finishes, or if a critical background error occurs.
+
+* `title`: A short summary or heading for the notification.
+* `message`: The detailed body text describing the event.
+
+You can also trigger a notification from a plugin, just use `emit Document::sInstance->showNotification("foo", "bar");`.
 
 ## Metadata
 
