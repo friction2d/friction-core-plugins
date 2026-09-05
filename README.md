@@ -47,6 +47,8 @@ public:
         Q_UNUSED(path);
         return nullptr;
     }
+
+    virtual void renderStateChanged() {};
 };
 ```
 
@@ -95,6 +97,25 @@ Triggered when the user attempts to open or import a file matching one of the ex
   * `scene`: A pointer to the active Canvas, allowing you to reference the current environment during import.
   * `path`: The absolute file path to the file being imported.
   * **Returns**: A smart pointer (`qsptr<BoundingBox>`) containing the parsed and constructed element hierarchy. Friction will automatically insert this into the active scene and register it with the undo/redo stack. Return `nullptr` if the import fails.
+
+```cpp
+virtual void renderStateChanged() {};
+```
+
+Triggered whenever timeline playback or rendering state changes. This is useful for plugins that need to sync with the timeline, pause background processing during playback, or disable specific UI actions while the application is rendering.
+
+This callback does not provide the new state as an argument. To determine the current state, you must query the `Document` singleton directly within your implementation:
+
+```cpp
+const auto state = Document::sInstance->getRenderState();
+```
+
+The returned value is of the enum type `PreviewState`. You can check it against the following values:
+
+* `PreviewState::stopped`
+* `PreviewState::rendering`
+* `PreviewState::playing`
+* `PreviewState::paused`
 
 ## Meta *(plugin.json)*
 
