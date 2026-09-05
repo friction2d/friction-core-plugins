@@ -9,29 +9,25 @@ Community Core (C++) Plugins for Friction.
 - **Description:** Hello World Example Plugin
 - **Group:** Test
 - **Author:** Friction
-- **Url:** https://friction.graphics
 
 ### Import Text File `v1.0.0`
 - **ID:** `graphics.friction.plugin.importtxt`
 - **Description:** Import Text File
 - **Group:** Import
 - **Author:** Ole-André Rodlie
-- **Url:** https://friction.graphics
 - **Supports Import:** `txt`
-
-### LauncherAPI `v1.0.0`
-- **ID:** `graphics.friction.plugin.launcherapi`
-- **Description:** D-Bus interface that show render progress in the dock or launcher icon on Linux.
-- **Group:** System
-- **Author:** Ole-André Rodlie
-- **Url:** https://wiki.ubuntu.com/Unity/LauncherAPI
 
 ### Linux Power Manager `v1.0.0`
 - **ID:** `graphics.friction.plugin.freedesktop.power`
 - **Description:** Will inhibit screen off during playback and inhibit suspend during rendering on Linux.
 - **Group:** System
 - **Author:** Ole-André Rodlie
-- **Url:** https://friction.graphics
+
+### Linux Render Progress (LauncherAPI) `v1.0.0`
+- **ID:** `graphics.friction.plugin.launcherapi`
+- **Description:** Show render progress in the dock or launcher icon on Linux.
+- **Group:** System
+- **Author:** Ole-André Rodlie
 
 
 ## Interface

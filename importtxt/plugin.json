@@ -3,7 +3,6 @@
     "name": "Import Text File",
     "version": "1.0.0",
     "author": "Ole-André Rodlie",
-    "url": "https://friction.graphics",
     "description": "Import Text File",
     "import_extensions": ["txt"],
     "group": "Import",

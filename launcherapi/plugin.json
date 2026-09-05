@@ -1,10 +1,9 @@
 {
     "id": "graphics.friction.plugin.launcherapi",
-    "name": "LauncherAPI",
+    "name": "Linux Render Progress (LauncherAPI)",
     "version": "1.0.0",
     "author": "Ole-André Rodlie",
-    "url": "https://wiki.ubuntu.com/Unity/LauncherAPI",
-    "description": "D-Bus interface that show render progress in the dock or launcher icon on Linux.",
+    "description": "Show render progress in the dock or launcher icon on Linux.",
     "group": "System",
     "api": "graphics.friction.CorePluginInterface/1.0"
 }
