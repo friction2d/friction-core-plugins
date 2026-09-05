@@ -23,6 +23,12 @@ Community Core (C++) Plugins for Friction.
 - **Author:** Ole-André Rodlie
 - **Url:** https://wiki.ubuntu.com/Unity/LauncherAPI
 
+### Linux Power Manager `v1.0.0`
+- **Description:** Will inhibit screen off during playback and inhibit suspend during rendering on Linux.
+- **Group:** System
+- **Author:** Ole-André Rodlie
+- **Url:** https://friction.graphics
+
 
 ## Interface
 
