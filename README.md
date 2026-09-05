@@ -7,7 +7,7 @@ Community Core (C++) Plugins for Friction.
 * Hello World *(Example)*
 * Import Text File
 
-## Interface *(coreplugininterface.h)*
+## Interface
 
 The `FrictionCorePluginInterface` defines the C++ contract between your plugin and Friction. Because all methods have default, empty implementations, every method is optional. You only need to override the methods that are relevant to your plugin's functionality.
 
@@ -117,7 +117,7 @@ The returned value is of the enum type `PreviewState`. You can check it against 
 * `PreviewState::playing`
 * `PreviewState::paused`
 
-## Meta *(plugin.json)*
+## Metadata
 
 ```
 {
@@ -156,17 +156,16 @@ The returned value is of the enum type `PreviewState`. You can check it against 
 In your Friction source repo:
 
 ```
-cd src
-git clone https://github.com/friction2d/friction-core-plugins plugins
+git clone https://github.com/friction2d/friction-core-plugins src/plugins
 ```
 
-Now reconfigure your project and plugins should show up in your IDE (or whatever you use).
+Now reconfigure your project (Friction will check for `src/plugins`) and plugins should show up in your IDE (or whatever you use).
 
-As default, plugins will be built in `build_dir/src/app/plugins`. Friction will search in the folder `plugins` relative to the binary for plugins. UI for setting different folder and support for enable/disable will be added in Friction later.
+As default, plugins will be built in `build_dir/src/app/plugins`. Friction will search in the folder `plugins` relative to the `friction` binary. UI for settings etc will be added in Friction later.
 
 ## Contribute
 
-Fork and make a pull request. This repo is less restrictive than the Friction repo, we allow the use of "AI" tools.
+Fork and make a pull request. Since this is a community repository it's less restrictive than Friction.
 
 ## License
 
