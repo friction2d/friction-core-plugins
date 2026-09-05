@@ -2,22 +2,21 @@
 
 #include "launcherapi.h"
 
+#ifdef HAS_DBUS
 #include "appsupport.h"
 
 void LauncherApiPlugin::init()
 {
     qDebug() << "init LauncherApiPlugin";
-#ifdef HAS_DBUS
     mUnity = new UnityLauncherEntry(QStringLiteral("%1.desktop")
                                         .arg(AppSupport::getAppID()),
                                     this);
-#endif
 }
 
 void LauncherApiPlugin::renderProgress(int frame,
                                        int total)
 {
-#ifdef HAS_DBUS
+    qDebug() << "LauncherApiPlugin: render progress" << frame << total;
     if (!mUnity) { return; }
     if (total > 0) {
         const double currentProgress = static_cast<double>(frame) / total;
@@ -26,6 +25,5 @@ void LauncherApiPlugin::renderProgress(int frame,
     } else {
         mUnity->setProgressVisible(false);
     }
-#endif
-    qDebug() << "LauncherApiPlugin: render progress" << frame << total;
 }
+#endif // HAS_DBUS

@@ -13,11 +13,11 @@ class LauncherApiPlugin : public QObject,
     Q_PLUGIN_METADATA(IID FrictionCorePluginInterface_iid FILE "plugin.json")
     Q_INTERFACES(FrictionCorePluginInterface)
 
+#ifdef HAS_DBUS
 public:
     void init() override;
     void renderProgress(int frame, int total) override;
 
-#ifdef HAS_DBUS
 private:
     UnityLauncherEntry *mUnity;
 #endif
