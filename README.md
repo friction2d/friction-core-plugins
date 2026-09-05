@@ -5,12 +5,14 @@ Community Core (C++) Plugins for Friction.
 ## Plugins
 
 ### Hello World `v1.0.0`
+- **ID:** `graphics.friction.plugin.helloworld`
 - **Description:** Hello World Example Plugin
 - **Group:** Test
 - **Author:** Friction
 - **Url:** https://friction.graphics
 
 ### Import Text File `v1.0.0`
+- **ID:** `graphics.friction.plugin.importtxt`
 - **Description:** Import Text File
 - **Group:** Import
 - **Author:** Ole-André Rodlie
@@ -18,12 +20,14 @@ Community Core (C++) Plugins for Friction.
 - **Supports Import:** `txt`
 
 ### LauncherAPI `v1.0.0`
+- **ID:** `graphics.friction.plugin.launcherapi`
 - **Description:** D-Bus interface that show render progress in the dock or launcher icon on Linux.
 - **Group:** System
 - **Author:** Ole-André Rodlie
 - **Url:** https://wiki.ubuntu.com/Unity/LauncherAPI
 
 ### Linux Power Manager `v1.0.0`
+- **ID:** `graphics.friction.plugin.freedesktop.power`
 - **Description:** Will inhibit screen off during playback and inhibit suspend during rendering on Linux.
 - **Group:** System
 - **Author:** Ole-André Rodlie

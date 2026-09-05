@@ -56,6 +56,7 @@ def generate_plugin_markdown(root_dir="."):
     md_lines = ["## Plugins\n"]
 
     for p in plugins:
+        id = p.get("id", "")
         name = p.get("name", "Unknown")
         version = p.get("version", "Unknown")
         author = p.get("author", "Unknown")
@@ -65,6 +66,10 @@ def generate_plugin_markdown(root_dir="."):
         extensions = p.get("import_extensions", [])
 
         md_lines.append(f"### {name} `v{version}`")
+
+        if id:
+            md_lines.append(f"- **ID:** `{id}`")
+
         md_lines.append(f"- **Description:** {desc}")
         md_lines.append(f"- **Group:** {group}")
         md_lines.append(f"- **Author:** {author}")
