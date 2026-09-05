@@ -6,6 +6,7 @@ Community Core (C++) Plugins for Friction.
 
 * Hello World *(Example)*
 * Import Text File
+* LauncherAPI
 
 ## Interface
 
