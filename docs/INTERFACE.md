@@ -138,3 +138,5 @@ Triggered by Friction to display a notification. This is typically used to alert
 
 * `title`: A short summary or heading for the notification.
 * `message`: The detailed body text describing the event.
+
+You can also trigger a notification from a plugin, just use `emit Document::sInstance->showNotification("foo", "bar");`.
