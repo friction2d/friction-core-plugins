@@ -48,7 +48,17 @@ public:
         return nullptr;
     }
 
-    virtual void renderStateChanged() {};
+    virtual void renderStateChanged(PreviewState state)
+    {
+        Q_UNUSED(state);
+    }
+
+    virtual void renderProgress(int frame,
+                                int total)
+    {
+        Q_UNUSED(frame);
+        Q_UNUSED(total);
+    }
 };
 ```
 
@@ -99,16 +109,10 @@ Triggered when the user attempts to open or import a file matching one of the ex
   * **Returns**: A smart pointer (`qsptr<BoundingBox>`) containing the parsed and constructed element hierarchy. Friction will automatically insert this into the active scene and register it with the undo/redo stack. Return `nullptr` if the import fails.
 
 ```cpp
-virtual void renderStateChanged() {};
+virtual void renderStateChanged(PreviewState state);
 ```
 
 Triggered whenever timeline playback or rendering state changes. This is useful for plugins that need to sync with the timeline, pause background processing during playback, or disable specific UI actions while the application is rendering.
-
-This callback does not provide the new state as an argument. To determine the current state, you must query the `Document` singleton directly within your implementation:
-
-```cpp
-const auto state = Document::sInstance->getRenderState();
-```
 
 The returned value is of the enum type `PreviewState`. You can check it against the following values:
 
@@ -116,6 +120,17 @@ The returned value is of the enum type `PreviewState`. You can check it against 
 * `PreviewState::rendering`
 * `PreviewState::playing`
 * `PreviewState::paused`
+
+```cpp
+virtual void renderProgress(int frame, int total);
+```
+
+Triggered continuously during a rendering or export operation to report the current progress. This is highly useful for plugins that want to display custom progress bars, log rendering statistics, or track when an export is nearing completion.
+
+* `frame`: The current frame number that has just been rendered or is currently being processed.
+* `total`: The total number of frames in the current rendering task.
+
+**Performance Note**: Because this method is called very frequently (typically once per frame), you should avoid executing heavy computations or complex UI updates within this callback.
 
 ## Metadata
 
