@@ -14,6 +14,7 @@ function(friction_add_plugin target_name)
     )
     target_include_directories(${target_name} PRIVATE
         ${CMAKE_SOURCE_DIR}/src/core
+        ${CMAKE_SOURCE_DIR}/src/ui
         ${CMAKE_SOURCE_DIR}/src/skia
     )
     target_link_libraries(${target_name} PRIVATE
@@ -23,6 +24,7 @@ function(friction_add_plugin target_name)
         Qt${QT_VERSION_MAJOR}::Gui
         Qt${QT_VERSION_MAJOR}::Widgets
         frictioncore
+        frictionui
     )
     if(APPLE)
         set_target_properties(${target_name} PROPERTIES
@@ -36,6 +38,15 @@ function(friction_add_plugin target_name)
         )
     endif()
     add_dependencies(all_friction_plugins ${target_name})
+    if(UNIX AND NOT APPLE)
+        include(GNUInstallDirs)
+        install(
+            TARGETS
+            ${target_name}
+            DESTINATION
+            ${CMAKE_INSTALL_LIBDIR}/friction/plugins
+        )
+    endif()
 endfunction()
 
 option(BUILD_PLG_HELLOWORLD "Build Hello World Plugin" OFF)
