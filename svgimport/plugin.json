@@ -1,0 +1,10 @@
+{
+    "id": "graphics.friction.plugin.svgimport",
+    "name": "SVG Animation Import",
+    "version": "1.0.0",
+    "author": "Pablo Gil",
+    "url": "https://github.com/friction2d/friction-core-plugins",
+    "description": "Import animated SVG files as editable Friction objects",
+    "group": "Import",
+    "api": "graphics.friction.CorePluginInterface/1.0"
+}

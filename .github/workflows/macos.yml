@@ -1,0 +1,95 @@
+name: macOS
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Check out Friction
+        uses: actions/checkout@v4
+        with:
+          repository: pgilfernandez/friction
+          ref: core-plugins-import-animated-svg-v1
+          path: friction
+          submodules: recursive
+
+      - name: Check out core plugins
+        uses: actions/checkout@v4
+        with:
+          path: friction/src/plugins
+
+      - name: Download Friction SDKs
+        run: |
+          mkdir -p friction/sdk
+          curl -fLO https://github.com/friction2d/friction-sdk/releases/download/v1.0.0/friction-sdk-1.0.0r7-macOS-arm64.tar.xz
+          curl -fLO https://github.com/friction2d/friction-sdk/releases/download/v1.0.0/friction-sdk-1.0.0r7-macOS-x86_64.tar.xz
+          echo "e904d59c7af517573f21e0b9e42cd2edadf0f1ec7271493a5095269beaad3bcd  friction-sdk-1.0.0r7-macOS-arm64.tar.xz" | shasum -a 256 --check
+          echo "ad68c4440021647a0981ad32cc39f80217e82a98854d0704cbdebf5b065be7e7  friction-sdk-1.0.0r7-macOS-x86_64.tar.xz" | shasum -a 256 --check
+          tar -xf friction-sdk-1.0.0r7-macOS-arm64.tar.xz -C friction/sdk
+          tar -xf friction-sdk-1.0.0r7-macOS-x86_64.tar.xz -C friction/sdk
+
+      - name: Build ARM64 plugin
+        working-directory: friction
+        run: |
+          export PATH="$PWD/sdk/arm64/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+          cmake -S . -B build-plugin-arm64 -G Ninja \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 \
+            -DCMAKE_PREFIX_PATH="$PWD/sdk/arm64" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SKIA=OFF \
+            -DSKIA_LIB_PATH="$PWD/sdk/arm64/lib" \
+            -DQSCINTILLA_INCLUDE_DIRS="$PWD/sdk/arm64/include" \
+            -DQSCINTILLA_LIBRARIES_DIRS="$PWD/sdk/arm64/lib"
+          cmake --build build-plugin-arm64 --target SvgImportPlugin
+
+      - name: Build Intel plugin
+        working-directory: friction
+        run: |
+          export PATH="$PWD/sdk/x86_64/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+          arch -x86_64 cmake -S . -B build-plugin-x86_64 -G Ninja \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 \
+            -DCMAKE_PREFIX_PATH="$PWD/sdk/x86_64" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SKIA=OFF \
+            -DSKIA_LIB_PATH="$PWD/sdk/x86_64/lib" \
+            -DQSCINTILLA_INCLUDE_DIRS="$PWD/sdk/x86_64/include" \
+            -DQSCINTILLA_LIBRARIES_DIRS="$PWD/sdk/x86_64/lib"
+          arch -x86_64 cmake --build build-plugin-x86_64 --target SvgImportPlugin
+
+      - name: Create universal SVG import plugin
+        run: |
+          mkdir -p plugin-artifacts/macos
+          for plugin in \
+            friction/build-plugin-arm64/src/app/friction.app/Contents/MacOS/plugins/SvgImportPlugin.so \
+            friction/build-plugin-x86_64/src/app/friction.app/Contents/MacOS/plugins/SvgImportPlugin.so; do
+            while read -r dependency; do
+              framework=$(basename "$(dirname "$(dirname "$(dirname "$dependency")")")")
+              binary=$(basename "$dependency")
+              install_name_tool -change "$dependency" \
+                "@executable_path/../Frameworks/$framework/Versions/5/$binary" "$plugin"
+            done < <(otool -L "$plugin" | awk 'NR > 1 { print $1 }' | grep '^/.*/Qt[^/]\+\.framework/' || true)
+          done
+          lipo -create \
+            friction/build-plugin-arm64/src/app/friction.app/Contents/MacOS/plugins/SvgImportPlugin.so \
+            friction/build-plugin-x86_64/src/app/friction.app/Contents/MacOS/plugins/SvgImportPlugin.so \
+            -output plugin-artifacts/macos/SvgImportPlugin.so
+          codesign --force --sign - plugin-artifacts/macos/SvgImportPlugin.so
+          lipo -info plugin-artifacts/macos/SvgImportPlugin.so
+          if otool -L plugin-artifacts/macos/SvgImportPlugin.so | grep -q "$PWD/friction/sdk"; then
+            echo "The plugin still contains SDK-local dependencies."
+            exit 1
+          fi
+
+      - name: Upload SVG import plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: svg-import-plugin-macOS-universal
+          path: plugin-artifacts/macos/SvgImportPlugin.so
+          if-no-files-found: error

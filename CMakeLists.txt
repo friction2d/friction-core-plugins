@@ -59,6 +59,11 @@ if(BUILD_PLG_IMPORTTXT)
     add_subdirectory(importtxt)
 endif()
 
+option(BUILD_PLG_IMPORTSVG "Build SVG Animation Import Plugin" ON)
+if(BUILD_PLG_IMPORTSVG)
+    add_subdirectory(svgimport)
+endif()
+
 if(UNIX AND NOT APPLE)
     option(BUILD_PLG_LAUNCHERAPI "Build LauncherAPI Plugin" ON)
     if(BUILD_PLG_LAUNCHERAPI)

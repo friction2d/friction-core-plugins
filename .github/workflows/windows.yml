@@ -1,0 +1,66 @@
+name: Windows
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - name: Check out Friction
+        uses: actions/checkout@v4
+        with:
+          repository: pgilfernandez/friction
+          ref: core-plugins-import-animated-svg-v1
+          path: friction
+          submodules: recursive
+
+      - name: Check out core plugins
+        uses: actions/checkout@v4
+        with:
+          path: friction/src/plugins
+
+      - name: Download Friction SDK
+        working-directory: friction
+        shell: pwsh
+        run: |
+          Invoke-WebRequest `
+            https://github.com/friction2d/friction-sdk/releases/download/v1.0.0/friction-sdk-1.0.0r7-windows-x64.7z `
+            -OutFile friction-sdk.7z
+          7z x friction-sdk.7z
+
+      - name: Configure plugin
+        working-directory: friction
+        shell: pwsh
+        run: |
+          cmake -S . -B build-plugin -G "Visual Studio 17 2022" -A x64 `
+            -DCMAKE_PREFIX_PATH="$pwd/sdk" `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DBUILD_SKIA=OFF `
+            -DSKIA_LIB_PATH="$pwd/sdk/lib"
+
+      - name: Build plugin
+        working-directory: friction
+        run: cmake --build build-plugin --config Release --target SvgImportPlugin
+
+      - name: Collect SVG import plugin
+        shell: pwsh
+        run: |
+          $plugins = @(Get-ChildItem -Path friction/build-plugin/src/app/plugins -Recurse -Filter SvgImportPlugin.dll)
+          if ($plugins.Count -ne 1) {
+            throw "Expected one SvgImportPlugin.dll, found $($plugins.Count)."
+          }
+          New-Item -ItemType Directory -Force plugin-artifacts/windows | Out-Null
+          Copy-Item $plugins[0].FullName plugin-artifacts/windows/SvgImportPlugin.dll
+
+      - name: Upload SVG import plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: svg-import-plugin-windows-x64
+          path: plugin-artifacts/windows/SvgImportPlugin.dll
+          if-no-files-found: error

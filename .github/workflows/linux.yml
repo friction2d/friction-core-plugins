@@ -1,0 +1,78 @@
+name: Linux
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Friction
+        uses: actions/checkout@v4
+        with:
+          repository: pgilfernandez/friction
+          ref: core-plugins-import-animated-svg-v1
+          path: friction
+          submodules: recursive
+
+      - name: Check out core plugins
+        uses: actions/checkout@v4
+        with:
+          path: friction/src/plugins
+
+      - name: Download Friction SDK
+        run: |
+          curl -fLO https://github.com/friction2d/friction-sdk/releases/download/v1.0.0/friction-sdk-1.0.0r15-linux-x86_64.tar.xz
+          mkdir -p linux-sdk
+          tar -xf friction-sdk-1.0.0r15-linux-x86_64.tar.xz -C linux-sdk
+
+      - name: Build plugin with the official Linux image
+        run: |
+          docker pull frictiongraphics/friction-vfxplatform-sdk
+          docker run --rm \
+            --mount type=bind,source="${{ github.workspace }}/friction",target=/root/friction \
+            --mount type=bind,source="${{ github.workspace }}/linux-sdk/friction",target=/opt/friction,readonly \
+            --workdir /root/friction \
+            frictiongraphics/friction-vfxplatform-sdk \
+            bash -lc '
+              source /opt/rh/llvm-toolset-7.0/enable
+              export PATH=/opt/friction/bin:$PATH
+              export PKG_CONFIG_PATH=/opt/friction/lib/pkgconfig
+              export LD_LIBRARY_PATH=/opt/friction/lib:$LD_LIBRARY_PATH
+              cp -a /opt/friction/include/libunw* /usr/include/
+              cp -a /opt/friction/lib/libunw* /usr/lib64/
+              cmake -S . -B build-plugin -G Ninja \
+                -DCMAKE_PREFIX_PATH=/opt/friction \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DQSCINTILLA_INCLUDE_DIRS=/opt/friction/include \
+                -DQSCINTILLA_LIBRARIES_DIRS=/opt/friction/lib \
+                -DQSCINTILLA_LIBRARIES=qscintilla2_friction_qt5 \
+                -DCMAKE_CXX_COMPILER=clang++ \
+                -DCMAKE_C_COMPILER=clang \
+                -DBUILD_SKIA=OFF \
+                -DSKIA_USE_EGL=ON \
+                -DSKIA_LIB_PATH=/opt/friction/lib \
+                -DSKIA_USE_SYSTEM_LIBS=OFF
+              cmake --build build-plugin --target SvgImportPlugin
+              patchelf --set-rpath \$ORIGIN/../../lib \
+                build-plugin/src/app/plugins/SvgImportPlugin.so
+            '
+
+      - name: Collect SVG import plugin
+        run: |
+          mkdir -p plugin-artifacts/linux
+          cp friction/build-plugin/src/app/plugins/SvgImportPlugin.so \
+            plugin-artifacts/linux/SvgImportPlugin.so
+          file plugin-artifacts/linux/SvgImportPlugin.so
+
+      - name: Upload SVG import plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: svg-import-plugin-linux-x86_64
+          path: plugin-artifacts/linux/SvgImportPlugin.so
+          if-no-files-found: error

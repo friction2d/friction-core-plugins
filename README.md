@@ -35,6 +35,13 @@ Community Core (C++) Plugins for Friction.
 - **Group:** System
 - **Author:** Ole-André Rodlie
 
+### SVG Animation Import `v1.0.0`
+- **ID:** `graphics.friction.plugin.svgimport`
+- **Description:** Import animated SVG files as editable Friction objects
+- **Group:** Import
+- **Author:** Pablo Gil
+- **Url:** https://github.com/friction2d/friction-core-plugins
+
 
 ## Interface
 
@@ -242,4 +249,3 @@ Fork and make a pull request. Since this is a community repository it's less res
 **`SPDX-License-Identifier: GPL-3.0-only`**
 
 All plugins must use this license.
-

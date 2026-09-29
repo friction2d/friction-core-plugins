@@ -81,7 +81,7 @@ def generate_plugin_markdown(root_dir="."):
             ext_str = ", ".join([f"`{ext}`" for ext in extensions])
             md_lines.append(f"- **Supports Import:** {ext_str}")
 
-        md_lines.append("") 
+        md_lines.append("")
 
     return "\n".join(md_lines)
 
